@@ -1,0 +1,18 @@
+[package]
+name = "qualys_api_comms"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = "0.9.15"
+reqwest = { version = "0.11", features = ["json", "multipart","cookies"] } # reqwest with JSON parsing support
+futures = "0.3" # for our async / await blocks
+tokio = { version = "1.12.0", features = ["full"] } # for our async runtime
+url = "2.2.2"
+ezmenulib = "0.2.10"
+serde_json = "1.0"
+regex = "1.5.5"
+lazy_static = "1.4.0"
+clap = { version = "3.1.18", features = ["derive"] }
