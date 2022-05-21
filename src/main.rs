@@ -20,7 +20,7 @@ async fn main() -> Result<(), Box<dyn Error>> {
             scan_actions(&auth,String::from("list")).await?;
         },
         //Todo Fill in the Assets requests
-        Commands::Assets{} =>{},
+        Commands::Assets{user,pass,action,ips,tracking_method} =>{},
         //Todo Fill in the Scan requests
         Commands::Scan{} => {},
     }

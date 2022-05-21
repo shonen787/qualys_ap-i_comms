@@ -62,7 +62,7 @@ pub async fn log_out(s: &String) -> Result<(), Box<dyn Error>>{
         .send()
         .await?;
 
-    println!("I think we logged out...");
+    // println!("I think we logged out...");
     Ok(())
 }
 

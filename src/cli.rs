@@ -29,7 +29,18 @@ pub enum Commands{
          target:Option<String>,
     },
     /// Modify or search Assets
+    #[clap(arg_required_else_help = true)]
     Assets{
+        #[clap(short,long,help("Username to access Qualys. *Required"))]
+        user: String,
+       #[clap(short,long,help("Password to access Qualys. *Required"))]
+        pass: String,
+        #[clap(short,long,help("Which action do you want to perform?\n\t🕳️List\n\t🕳️Add\n\t🕳️Update"))]
+        action: String,
+        #[clap(short,long,help("Show only certain IP addresses/ranges. One or more IPs/ranges may be specified."))]
+        ips: Option<String>,
+        #[clap(short,long,help("Show only IP addresses/ranges which have a certain tracking method. Valid values: IP, DNS, NETBIOS."))]
+        tracking_method: Option<String>,
 
     },
     /// Prepare a scan
