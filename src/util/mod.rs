@@ -1,4 +1,5 @@
 use std::io::{stdin,stdout,Write};
+pub mod xml;
 
 pub fn user_input(s: &mut String) -> String{
     print!("Please enter some text: ");
@@ -9,7 +10,6 @@ pub fn user_input(s: &mut String) -> String{
     }
     if let Some('\r')=s.chars().next_back() {
         s.pop();
-
     }
     s.to_string()
 }
