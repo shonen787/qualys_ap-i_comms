@@ -26,7 +26,7 @@ struct Scans{
 
 }
 
-pub fn parse_list(s: String){
+pub fn parse_list(s: String,clientelle: Option<String>){
     let mut collected: Vec<Scans> = Vec::new();
     let mut pusher: Pusher = Pusher::Neither;
     
@@ -98,20 +98,28 @@ pub fn parse_list(s: String){
 
     collected.sort_by_key(|d| d.title.clone());
 
-    print_tabled(collected);
+    print_tabled(collected,clientelle);
     
 
 
 }
 
 
-fn print_tabled(collected: Vec<Scans>){
+fn print_tabled(collected: Vec<Scans>,clientelle: Option<String>){
     let mut client: String =String::new();
   
+    match clientelle{
+        None=>    for i in collected{
+            println!("Scan Title:\n\t{}\nLaunch DateTime:\n\t{}\nCreated by:\n\t{}\nScan Status:\n\t{}\nScan Type:\n\t{}\nScan Targets:\n\t{}\nScan Duration:\n\t{}", i.title, i.launch_dt,i.user,i.stat, i.scan_type, i.target,i.duration);
+            println!("\n################################");},
+        Some(v)=>    for i in collected{
+                        if i.title.contains(&v.to_owned()){
+                            println!("Scan Title:\n\t{}\nLaunch DateTime:\n\t{}\nCreated by:\n\t{}\nScan Status:\n\t{}\nScan Type:\n\t{}\nScan Targets:\n\t{}\nScan Duration:\n\t{}", i.title, i.launch_dt,i.user,i.stat, i.scan_type, i.target,i.duration);
+                            println!("\n################################");
+                    }
+        },
+    }
 
-    for i in collected{
-        println!("Scan Title:\n\t{}\nLaunch DateTime:\n\t{}\nCreated by:\n\t{}\nScan Status:\n\t{}\nScan Type:\n\t{}\nScan Targets:\n\t{}\nScan Duration:\n\t{}", i.title, i.launch_dt,i.user,i.stat, i.scan_type, i.target,i.duration);
-        println!("\n################################");}
 }
 
 

@@ -9,7 +9,7 @@ use crate::util::xml;
 
 
 pub async fn log_in(s: &mut String, user: String, pass: String) -> Result<(), Box<dyn Error>>{
-    println!("Logging in");
+    println!("Going to log in as {} 🐒", user);
    
     //create reqwest client
     let client = reqwest::Client::new();
@@ -40,6 +40,7 @@ pub async fn log_in(s: &mut String, user: String, pass: String) -> Result<(), Bo
 }
 
 pub async fn log_out(s: &String) -> Result<(), Box<dyn Error>>{
+        println!("Going to log out now 👋.");
         use reqwest::{cookie::Jar, Url};
         let cookies = s.clone();
         let session_endpoint = String::from("https://qualysapi.qualys.com/api/2.0/fo/session/");
@@ -67,30 +68,64 @@ pub async fn log_out(s: &String) -> Result<(), Box<dyn Error>>{
 }
 
 
-pub async fn scan_actions(s: &String, action: String) -> Result<(), Box<dyn Error>>{
+pub async fn list_actions(s: &String, action: String,clientelle: Option<String>,
+                          state: Option<String>,processed: Option<String>,scan_type: Option<String>,
+                          target: Option<String>,afterdate: Option<String>,beforedate: Option<String>) -> Result<(), Box<dyn Error>>{
     use reqwest::{cookie::Jar, Url};
     let cookies = s.clone();
+    
     let jar = Jar::default();
     let session_endpoint = String::from("https://qualysapi.qualys.com/api/2.0/fo/scan/");
     jar.add_cookie_str(&cookies, &session_endpoint.parse::<Url>().unwrap());
     let jar = std::sync::Arc::new(jar);
+
     let client = reqwest::Client::builder()
     .cookie_store(true)
     .cookie_provider(std::sync::Arc::clone(&jar))
     .build()?;
-    println!("{}", s);
+    
+    let mut parameters = vec![("action",String::from("list"))];
+    //Parameter builder
 
-    if action.as_str() == String::from("list"){
-        xml::parse_list(client
+    match state{
+        None => print!(""),
+        Some(v) => parameters.push(("state", v)),
+    }
+    match processed{
+        None => print!(""),
+        Some(v) => { if (v == String::from("True")) || (v == String::from("true")){
+                    parameters.push(("processed", String::from("1")))
+                    } else {parameters.push(("processed", String::from("0")))}
+                },
+    }
+    match scan_type{
+        None => print!(""),
+        Some(v) => parameters.push(("type", v)),
+    }
+    match target{
+        None => print!(""),
+        Some(v) => parameters.push(("target", v)),
+    }
+    match afterdate{
+        None => print!(""),
+        Some(v) => parameters.push(("launched_after_datetime", v)),
+    }
+    match beforedate{
+        None => print!(""),
+        Some(v) => parameters.push(("launched_before_datetime", v)),
+    }
+
+
+    xml::parse_list(client
             .post(Url::parse(&session_endpoint)?)
             .header("Accept", "text/plain")
             .header("X-Requested-With","Rust-Execv2")
-            .query(&[("action","list")])
+            .query(&parameters)
             .timeout(Duration::from_secs(3))
             .send()
-            .await?.text().await?);
+            .await?.text().await?,clientelle);
 
-    }
+    
     Ok(())
 }
 

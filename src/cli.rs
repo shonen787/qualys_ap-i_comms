@@ -27,6 +27,10 @@ pub enum Commands{
          scan_type:Option<String>,
          #[clap(long,help("Search for scans based on the targets.\nEnter ranges using a hyphen, x.x.x.x - x.x.x.x"))]
          target:Option<String>,
+         #[clap(long,help("Search for scans after a date format (UTC/GMT), like “2007-07-01” or “2007-01-25T23:12:00Z”."))]
+         afterdate:Option<String>,
+         #[clap(long,help("Search for scans before a date format (UTC/GMT), like “2007-07-01” or “2007-01-25T23:12:00Z”."))]
+         beforedate:Option<String>,
     },
     /// Modify or search Assets
     #[clap(arg_required_else_help = true)]

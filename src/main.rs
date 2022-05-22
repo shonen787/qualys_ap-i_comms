@@ -15,9 +15,18 @@ async fn main() -> Result<(), Box<dyn Error>> {
     let mut auth: String = String::new();
     
     match args.command{
-        Commands::List {user, pass,client,state,processed,scan_type,target} =>{
+        Commands::List {user, pass,client,state,processed,scan_type,target,afterdate,beforedate} =>{
             log_in(&mut auth, user,pass).await?;
-            scan_actions(&auth,String::from("list")).await?;
+            list_actions(
+                &auth,
+                String::from("list"),
+                client,
+                state,
+                processed,
+                scan_type,
+                target,
+                afterdate,
+                beforedate).await?;
         },
         //Todo Fill in the Assets requests
         Commands::Assets{user,pass,action,ips,tracking_method} =>{},
